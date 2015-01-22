@@ -15,10 +15,9 @@
         android:layout_centerHorizontal="true" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Contact Name"
         android:ems="10"
         android:id="@+id/nameTxt"
         android:layout_below="@+id/title"
@@ -27,7 +26,8 @@
         android:layout_marginTop="60dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="Name of Contact" />
+        android:hint="Name of Contact"
+        android:autoText="false" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/nameTxt"
         android:layout_alignEnd="@+id/nameTxt"
-        android:text="Phone Number" />
+        android:hint="Phone Number" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -48,12 +48,12 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/emailTxt"
-        android:text="Email"
         android:layout_below="@+id/phoneTxt"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/phoneTxt"
-        android:layout_alignEnd="@+id/phoneTxt" />
+        android:layout_alignEnd="@+id/phoneTxt"
+        android:hint="Email" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/emailTxt"
         android:layout_alignEnd="@+id/emailTxt"
-        android:text="Address" />
+        android:hint="Address" />
 
     <Button
         android:layout_width="wrap_content"
