@@ -7,14 +7,28 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TabHost;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
 import java.lang.CharSequence;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
 
     EditText txtName, txtPhone, txtEmail, txtAddress;
+    List<Contact> Contacts = new ArrayList<Contact>();
+    ListView contactListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +39,29 @@ public class MainActivity extends ActionBarActivity {
         txtPhone = (EditText) findViewById(R.id.phoneTxt);
         txtEmail = (EditText) findViewById(R.id.emailTxt);
         txtAddress = (EditText) findViewById(R.id.addressTxt);
-        final Button btnAdd = (Button) findViewById(R.id.addBtn);
+        contactListView = (ListView) findViewById(R.id.listView);
+        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
 
+        tabHost.setup();
+        TabHost.TabSpec tabSpec = tabHost.newTabSpec("Creator");
+        tabSpec.setContent(R.id.tabCreate);
+        tabSpec.setIndicator("Creator");
+        tabHost.addTab(tabSpec);
+
+        tabSpec = tabHost.newTabSpec("List");
+        tabSpec.setContent(R.id.tabContactList);
+        tabSpec.setIndicator("List");
+        tabHost.addTab(tabSpec);
+
+        final Button btnAdd = (Button) findViewById(R.id.addBtn);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addContact(txtName.getText().toString(), txtPhone.getText().toString(), txtEmail.getText().toString(), txtAddress.getText().toString());
+                populateList();
+                Toast.makeText(getApplicationContext(), txtName.getText().toString() + " has been added to your Contacts!", Toast.LENGTH_SHORT).show();
+            }
+        });
         txtName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -45,7 +80,38 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    private void populateList(){
+        ArrayAdapter<Contact> adapter = new ContactListAdapter();
+        contactListView.setAdapter(adapter);
+    }
 
+    private void addContact(String name, String phone, String email, String address){
+        Contacts.add(new Contact(name, phone, email, address));
+    }
+
+    private class ContactListAdapter extends ArrayAdapter<Contact>{
+        public ContactListAdapter(){
+            super (MainActivity.this, R.layout.listview_item, Contacts);
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup parent){
+            if (view == null)
+                view = getLayoutInflater().inflate(R.layout.listview_item, parent, false);
+            Contact currentContact = Contacts.get(position);
+
+            TextView name = (TextView) view.findViewById(R.id.contactName);
+            name.setText(currentContact.getName());
+            TextView phone = (TextView) view.findViewById(R.id.phoneNumber);
+            phone.setText(currentContact.getPhone());
+            TextView email = (TextView) view.findViewById(R.id.emailAddress);
+            email.setText(currentContact.getEmail());
+            TextView address = (TextView) view.findViewById(R.id.cAddress);
+            address.setText(currentContact.getAddress());
+
+            return view;
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
